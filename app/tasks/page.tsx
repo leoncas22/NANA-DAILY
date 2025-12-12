@@ -12,14 +12,23 @@ import TaskForm from '@/components/TaskForm';
 import { getUser, getTasks, addTask, updateTask, deleteTask } from '@/lib/storage';
 import { filterBySearch } from '@/lib/utils';
 
+interface Task {
+    id?: string;
+    title?: string;
+    description?: string;
+    date: string;
+    completed?: boolean;
+    priority?: string;
+}
+
 export default function TasksPage() {
     const router = useRouter();
-    const [tasks, setTasks] = useState([]);
-    const [filteredTasks, setFilteredTasks] = useState([]);
-    const [searchQuery, setSearchQuery] = useState('');
-    const [filter, setFilter] = useState('all'); // all, active, completed
-    const [showTaskModal, setShowTaskModal] = useState(false);
-    const [editingTask, setEditingTask] = useState(null);
+    const [tasks, setTasks] = useState<Task[]>([]);
+    const [filteredTasks, setFilteredTasks] = useState<Task[]>([]);
+    const [searchQuery, setSearchQuery] = useState<string>('');
+    const [filter, setFilter] = useState<string>('all'); // all, active, completed
+    const [showTaskModal, setShowTaskModal] = useState<boolean>(false);
+    const [editingTask, setEditingTask] = useState<Task | null>(null);
 
     useEffect(() => {
         const currentUser = getUser();
@@ -54,7 +63,7 @@ export default function TasksPage() {
         setTasks(getTasks());
     };
 
-    const handleTaskToggle = (id) => {
+    const handleTaskToggle = (id: string) => {
         const task = tasks.find(t => t.id === id);
         if (task) {
             updateTask(id, { completed: !task.completed });
@@ -62,7 +71,7 @@ export default function TasksPage() {
         }
     };
 
-    const handleTaskSubmit = (formData) => {
+    const handleTaskSubmit = (formData: Task) => {
         if (editingTask) {
             updateTask(editingTask.id, formData);
         } else {
@@ -73,7 +82,7 @@ export default function TasksPage() {
         loadData();
     };
 
-    const handleDeleteTask = (id) => {
+    const handleDeleteTask = (id: string) => {
         if (confirm('Are you sure you want to delete this task?')) {
             deleteTask(id);
             loadData();
@@ -125,8 +134,8 @@ export default function TasksPage() {
                                         key={f}
                                         onClick={() => setFilter(f)}
                                         className={`px-4 py-2 rounded-lg font-medium transition-all ${filter === f
-                                                ? 'bg-soft-blue text-white'
-                                                : 'bg-white text-gray-600 hover:bg-soft-gray'
+                                            ? 'bg-soft-blue text-white'
+                                            : 'bg-white text-gray-600 hover:bg-soft-gray'
                                             }`}
                                     >
                                         {f.charAt(0).toUpperCase() + f.slice(1)}
@@ -138,7 +147,7 @@ export default function TasksPage() {
                         {/* Tasks List */}
                         <div className="space-y-3">
                             {filteredTasks.length > 0 ? (
-                                filteredTasks.map((task, index) => (
+                                filteredTasks.map((task: Task, index: number) => (
                                     <motion.div
                                         key={task.id}
                                         initial={{ opacity: 0, y: 20 }}
@@ -148,7 +157,7 @@ export default function TasksPage() {
                                         <TaskCard
                                             task={task}
                                             onToggle={handleTaskToggle}
-                                            onEdit={(t) => { setEditingTask(t); setShowTaskModal(true); }}
+                                            onEdit={(t: Task) => { setEditingTask(t); setShowTaskModal(true); }}
                                             onDelete={handleDeleteTask}
                                         />
                                     </motion.div>
