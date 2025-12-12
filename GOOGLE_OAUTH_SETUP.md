@@ -35,7 +35,7 @@ Before you can use Google Sign-In, you need to set up OAuth credentials from Goo
    - Application type: "Web application"
    - Name: "Nana Daily Web Client"
    - Authorized redirect URIs:
-     - Add: `http://localhost:3000/api/auth/callback/google`
+     - Add: `http://localhost:3000/api/auth/callback/google` (for local development)
      - For production, add your production URL too
    - Click "Create"
 
@@ -50,7 +50,7 @@ Before you can use Google Sign-In, you need to set up OAuth credentials from Goo
 GOOGLE_CLIENT_ID=your-client-id-here
 GOOGLE_CLIENT_SECRET=your-client-secret-here
 NEXTAUTH_SECRET=generate-a-random-secret
-NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_URL= # http://localhost:3000 for dev, your-production-url for prod
 ```
 
 ### Generate NEXTAUTH_SECRET
@@ -83,7 +83,7 @@ npm run dev
 
 ### "Redirect URI mismatch" error
 - Make sure you added `http://localhost:3000/api/auth/callback/google` exactly in Google Cloud Console
-- Check that NEXTAUTH_URL in `.env.local` is `http://localhost:3000` (no trailing slash)
+- Check that NEXTAUTH_URL in `.env.local` is correct
 
 ### "Access blocked" or "This app hasn't been verified"
 - During development, you can click "Continue" (as a test user)
