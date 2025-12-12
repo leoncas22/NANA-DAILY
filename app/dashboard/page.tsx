@@ -14,15 +14,37 @@ import EventForm from '@/components/EventForm';
 import { getUser, getTasks, getEvents, updateTask, deleteTask, addTask, deleteEvent, addEvent, updateEvent } from '@/lib/storage';
 import { getGreeting, isDueToday, isUpcoming, sortByDate } from '@/lib/utils';
 
+interface User {
+    name: string;
+    email: string;
+}
+
+interface Task {
+    id?: string;
+    title?: string;
+    date: string;
+    completed?: boolean;
+    priority?: string;
+}
+
+interface Event {
+    id?: string;
+    title?: string;
+    date: string;
+    time?: string;
+    description?: string;
+    type?: string;
+}
+
 export default function DashboardPage() {
     const router = useRouter();
-    const [user, setUser] = useState(null);
-    const [tasks, setTasks] = useState([]);
-    const [events, setEvents] = useState([]);
-    const [showTaskModal, setShowTaskModal] = useState(false);
-    const [showEventModal, setShowEventModal] = useState(false);
-    const [editingTask, setEditingTask] = useState(null);
-    const [editingEvent, setEditingEvent] = useState(null);
+    const [user, setUser] = useState<User | null>(null);
+    const [tasks, setTasks] = useState<Task[]>([]);
+    const [events, setEvents] = useState<Event[]>([]);
+    const [showTaskModal, setShowTaskModal] = useState<boolean>(false);
+    const [showEventModal, setShowEventModal] = useState<boolean>(false);
+    const [editingTask, setEditingTask] = useState<Task | null>(null);
+    const [editingEvent, setEditingEvent] = useState<Event | null>(null);
 
     useEffect(() => {
         const currentUser = getUser();
@@ -40,7 +62,7 @@ export default function DashboardPage() {
         setEvents(getEvents());
     };
 
-    const handleTaskToggle = (id) => {
+    const handleTaskToggle = (id: string) => {
         const task = tasks.find(t => t.id === id);
         if (task) {
             updateTask(id, { completed: !task.completed });
@@ -48,7 +70,7 @@ export default function DashboardPage() {
         }
     };
 
-    const handleTaskSubmit = (formData) => {
+    const handleTaskSubmit = (formData: Task) => {
         if (editingTask) {
             updateTask(editingTask.id, formData);
         } else {
@@ -59,7 +81,7 @@ export default function DashboardPage() {
         loadData();
     };
 
-    const handleEventSubmit = (formData) => {
+    const handleEventSubmit = (formData: Event) => {
         if (editingEvent) {
             updateEvent(editingEvent.id, formData);
         } else {
@@ -70,14 +92,14 @@ export default function DashboardPage() {
         loadData();
     };
 
-    const handleDeleteTask = (id) => {
+    const handleDeleteTask = (id: string) => {
         if (confirm('Are you sure you want to delete this task?')) {
             deleteTask(id);
             loadData();
         }
     };
 
-    const handleDeleteEvent = (id) => {
+    const handleDeleteEvent = (id: string) => {
         if (confirm('Are you sure you want to delete this event?')) {
             deleteEvent(id);
             loadData();
@@ -200,12 +222,12 @@ export default function DashboardPage() {
                                 <h2 className="text-xl font-semibold text-text-black mb-4">Recent Tasks</h2>
                                 <div className="space-y-3">
                                     {recentTasks.length > 0 ? (
-                                        recentTasks.map(task => (
+                                        recentTasks.map((task: Task) => (
                                             <TaskCard
                                                 key={task.id}
                                                 task={task}
                                                 onToggle={handleTaskToggle}
-                                                onEdit={(t) => { setEditingTask(t); setShowTaskModal(true); }}
+                                                onEdit={(t: Task) => { setEditingTask(t); setShowTaskModal(true); }}
                                                 onDelete={handleDeleteTask}
                                             />
                                         ))
@@ -220,11 +242,11 @@ export default function DashboardPage() {
                                 <h2 className="text-xl font-semibold text-text-black mb-4">Upcoming Events</h2>
                                 <div className="space-y-3">
                                     {upcomingEvents.length > 0 ? (
-                                        upcomingEvents.map(event => (
+                                        upcomingEvents.map((event: Event) => (
                                             <EventCard
                                                 key={event.id}
                                                 event={event}
-                                                onEdit={(e) => { setEditingEvent(e); setShowEventModal(true); }}
+                                                onEdit={(e: Event) => { setEditingEvent(e); setShowEventModal(true); }}
                                                 onDelete={handleDeleteEvent}
                                             />
                                         ))
