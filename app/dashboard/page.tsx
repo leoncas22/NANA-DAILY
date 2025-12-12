@@ -109,7 +109,7 @@ export default function DashboardPage() {
                             <h1 className="text-3xl sm:text-4xl font-bold text-text-black mb-2">
                                 {getGreeting()}, {user.name}! 👋
                             </h1>
-                            <p className="text-gray-600">Here's what's happening today</p>
+                            <p className="text-gray-600">{"Here's what's happening today"}</p>
                         </motion.div>
 
                         {/* Stats Cards */}
