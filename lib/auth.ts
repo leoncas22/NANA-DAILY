@@ -16,7 +16,8 @@ export const authOptions: NextAuthOptions = {
         async session({ session, token }) {
             // Add user ID to session
             if (session.user) {
-                session.user.id = token.sub;
+                // @ts-ignore - id is added via module augmentation
+                session.user.id = token.sub || '';
             }
             return session;
         },
