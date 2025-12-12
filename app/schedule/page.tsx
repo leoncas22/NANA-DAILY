@@ -76,7 +76,7 @@ export default function SchedulePage() {
     };
 
     // Group events by date
-    const groupedEvents = groupByDate(filteredEvents);
+    const groupedEvents = groupByDate(filteredEvents) as Record<string, Event[]>;
     const dateKeys = Object.keys(groupedEvents).sort();
 
     return (

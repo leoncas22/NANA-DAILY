@@ -9,7 +9,7 @@ import { getUser, clearUser } from '@/lib/storage';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 
-export default function Navbar({ showSearch = false, searchValue = '', onSearchChange = () => { } }) {
+export default function Navbar({ showSearch = false, searchValue = '', onSearchChange = (val) => { } }) {
     const [user, setUser] = useState(null);
     const [showUserMenu, setShowUserMenu] = useState(false);
     const [showMobileMenu, setShowMobileMenu] = useState(false);
