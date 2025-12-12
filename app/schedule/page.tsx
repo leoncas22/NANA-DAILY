@@ -13,13 +13,24 @@ import { getUser, getEvents, addEvent, updateEvent, deleteEvent } from '@/lib/st
 import { filterBySearch, groupByDate, sortByDate } from '@/lib/utils';
 import { format, parseISO } from 'date-fns';
 
+interface Event {
+    id?: string;
+    title?: string;
+    date: string;
+    time?: string;
+    location?: string;
+    notes?: string;
+    description?: string;
+    type?: string;
+}
+
 export default function SchedulePage() {
     const router = useRouter();
-    const [events, setEvents] = useState([]);
-    const [filteredEvents, setFilteredEvents] = useState([]);
-    const [searchQuery, setSearchQuery] = useState('');
-    const [showEventModal, setShowEventModal] = useState(false);
-    const [editingEvent, setEditingEvent] = useState(null);
+    const [events, setEvents] = useState<Event[]>([]);
+    const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
+    const [searchQuery, setSearchQuery] = useState<string>('');
+    const [showEventModal, setShowEventModal] = useState<boolean>(false);
+    const [editingEvent, setEditingEvent] = useState<Event | null>(null);
 
     useEffect(() => {
         const currentUser = getUser();
@@ -46,7 +57,7 @@ export default function SchedulePage() {
         setEvents(getEvents());
     };
 
-    const handleEventSubmit = (formData) => {
+    const handleEventSubmit = (formData: Event) => {
         if (editingEvent) {
             updateEvent(editingEvent.id, formData);
         } else {
@@ -57,7 +68,7 @@ export default function SchedulePage() {
         loadData();
     };
 
-    const handleDeleteEvent = (id) => {
+    const handleDeleteEvent = (id: string) => {
         if (confirm('Are you sure you want to delete this event?')) {
             deleteEvent(id);
             loadData();
@@ -129,7 +140,7 @@ export default function SchedulePage() {
 
                                             {/* Events for this date */}
                                             <div className="space-y-3">
-                                                {dateEvents.map((event, index) => (
+                                                {dateEvents.map((event: Event, index: number) => (
                                                     <motion.div
                                                         key={event.id}
                                                         initial={{ opacity: 0, y: 20 }}
@@ -138,7 +149,7 @@ export default function SchedulePage() {
                                                     >
                                                         <EventCard
                                                             event={event}
-                                                            onEdit={(e) => { setEditingEvent(e); setShowEventModal(true); }}
+                                                            onEdit={(e: Event) => { setEditingEvent(e); setShowEventModal(true); }}
                                                             onDelete={handleDeleteEvent}
                                                         />
                                                     </motion.div>
