@@ -13,13 +13,22 @@ import EventForm from '@/components/EventForm';
 import { getUser, getEvents, addEvent, updateEvent, deleteEvent } from '@/lib/storage';
 import { getEventsForDate } from '@/lib/utils';
 
+interface Event {
+    id?: string;
+    title?: string;
+    date: string;
+    time?: string;
+    description?: string;
+    type?: string;
+}
+
 export default function CalendarPage() {
     const router = useRouter();
-    const [events, setEvents] = useState([]);
-    const [selectedDate, setSelectedDate] = useState(new Date());
-    const [showEventModal, setShowEventModal] = useState(false);
-    const [editingEvent, setEditingEvent] = useState(null);
-    const [selectedDateEvents, setSelectedDateEvents] = useState([]);
+    const [events, setEvents] = useState<Event[]>([]);
+    const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+    const [showEventModal, setShowEventModal] = useState<boolean>(false);
+    const [editingEvent, setEditingEvent] = useState<Event | null>(null);
+    const [selectedDateEvents, setSelectedDateEvents] = useState<Event[]>([]);
 
     useEffect(() => {
         const currentUser = getUser();
@@ -41,7 +50,7 @@ export default function CalendarPage() {
         setEvents(getEvents());
     };
 
-    const handleDateClick = (date) => {
+    const handleDateClick = (date: Date) => {
         setSelectedDate(date);
         setEditingEvent({
             date: format(date, 'yyyy-MM-dd'),
@@ -49,7 +58,7 @@ export default function CalendarPage() {
         setShowEventModal(true);
     };
 
-    const handleEventSubmit = (formData) => {
+    const handleEventSubmit = (formData: Event) => {
         if (editingEvent && editingEvent.id) {
             updateEvent(editingEvent.id, formData);
         } else {
@@ -60,7 +69,7 @@ export default function CalendarPage() {
         loadData();
     };
 
-    const handleDeleteEvent = (id) => {
+    const handleDeleteEvent = (id: string) => {
         if (confirm('Are you sure you want to delete this event?')) {
             deleteEvent(id);
             loadData();
@@ -110,11 +119,11 @@ export default function CalendarPage() {
 
                                     <div className="space-y-3">
                                         {selectedDateEvents.length > 0 ? (
-                                            selectedDateEvents.map(event => (
+                                            selectedDateEvents.map((event: Event) => (
                                                 <EventCard
                                                     key={event.id}
                                                     event={event}
-                                                    onEdit={(e) => { setEditingEvent(e); setShowEventModal(true); }}
+                                                    onEdit={(e: Event) => { setEditingEvent(e); setShowEventModal(true); }}
                                                     onDelete={handleDeleteEvent}
                                                 />
                                             ))
